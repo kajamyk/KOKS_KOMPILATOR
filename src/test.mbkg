@@ -1,0 +1,22 @@
+int x
+float y
+
+scan(x)
+x = x + 1
+print(x)
+x = x - 1
+print(x)
+x = x * 2
+print(x)
+x = x / 2
+print(x)
+
+scan(y)
+y = y + 1.0
+print(y)
+y = y - 1.0
+print(y)
+y = y * 2.0
+print(y)
+y = y / 2.0
+print(y)

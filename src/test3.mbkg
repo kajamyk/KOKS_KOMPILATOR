@@ -1,0 +1,16 @@
+int x = 0
+
+loop x < 5 begin
+    int y = 0
+    loop y < 3 begin
+        if y == 2 begin
+            int z = y * 10
+            print(z)
+        endif
+        else
+            print(y)
+        endelse
+    endloop
+endloop
+
+print(x)

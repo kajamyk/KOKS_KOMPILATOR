@@ -1,0 +1,6 @@
+.idea
+/gen/
+src/output/
+*.iml
+*.class
+*.ll

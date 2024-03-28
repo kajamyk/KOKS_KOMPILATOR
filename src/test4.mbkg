@@ -1,0 +1,11 @@
+float function square(float num) begin
+    print(num)
+    float res
+    res = num * num 
+    return res
+endfunction
+
+float test
+scan(test)
+test = square(test)
+print(test)

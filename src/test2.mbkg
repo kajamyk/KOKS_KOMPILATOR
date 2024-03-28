@@ -1,0 +1,14 @@
+int first
+int second
+int third
+int fourth
+
+scan(first)
+scan(second)
+scan(third)
+scan(fourth)
+
+int{5} arr = [0, first, second, third, fourth]
+arr[1] = 2
+int a = arr[3]
+print(a)
