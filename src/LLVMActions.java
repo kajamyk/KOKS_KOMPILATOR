@@ -10,7 +10,7 @@ class Value {
     }
 }
 
-public class LLVMActions extends MBKGBaseListener {
+public class LLVMActions extends SPEEDYBaseListener {
     HashMap<String, String> variables = new HashMap<String, String>();
     HashMap<String, String> globalVariables = new HashMap<String, String>();
     HashSet<String> types = new HashSet<String>() {{
@@ -30,18 +30,18 @@ public class LLVMActions extends MBKGBaseListener {
     Boolean isGlobal;
 
     @Override
-    public void enterProgram(MBKGParser.ProgramContext ctx) {
+    public void enterProgram(SPEEDYParser.ProgramContext ctx) {
         isGlobal = true;
     }
 
     @Override
-    public void exitProgram(MBKGParser.ProgramContext ctx) {
+    public void exitProgram(SPEEDYParser.ProgramContext ctx) {
         LLVMGenerator.close_main();
         System.out.println(LLVMGenerator.generate());
     }
 
     @Override
-    public void exitDeclAssign(MBKGParser.DeclAssignContext ctx) {
+    public void exitDeclAssign(SPEEDYParser.DeclAssignContext ctx) {
         String ID = ctx.declaration().getChild(1).getText();
         String ArrayOperation = ctx.operation().getChild(0).getText();
         if (ArrayOperation.charAt(0) != '[') {
@@ -121,7 +121,7 @@ public class LLVMActions extends MBKGBaseListener {
     }
 
     @Override
-    public void exitIdAssign(MBKGParser.IdAssignContext ctx) {
+    public void exitIdAssign(SPEEDYParser.IdAssignContext ctx) {
         String ID = ctx.ID().getText();
 
         if (!variables.containsKey(ID) && !globalVariables.containsKey(ID)) {
@@ -204,7 +204,7 @@ public class LLVMActions extends MBKGBaseListener {
     }
 
     @Override
-    public void exitArrayIdAssign(MBKGParser.ArrayIdAssignContext ctx) {
+    public void exitArrayIdAssign(SPEEDYParser.ArrayIdAssignContext ctx) {
         String ARRAY_ID = ctx.ARRAY_ID().getText();
         String[] split_array_id = ARRAY_ID.split("\\[");
         String id = split_array_id[0];
@@ -237,7 +237,7 @@ public class LLVMActions extends MBKGBaseListener {
     }
 
     @Override
-    public void exitDeclaration(MBKGParser.DeclarationContext ctx) {
+    public void exitDeclaration(SPEEDYParser.DeclarationContext ctx) {
         String ID = ctx.ID().getText();
         String TYPE = ctx.type().getText();
 
@@ -273,7 +273,7 @@ public class LLVMActions extends MBKGBaseListener {
     }
 
     @Override
-    public void exitFunction_call(MBKGParser.Function_callContext ctx) {
+    public void exitFunction_call(SPEEDYParser.Function_callContext ctx) {
         String FUNC_NAME = ctx.function_name().getText();
         if (FUNC_NAME.equals("print")) {
             if (argumentsList.size() == 1) {
@@ -374,7 +374,7 @@ public class LLVMActions extends MBKGBaseListener {
     }
 
     @Override
-    public void exitFuncAssign(MBKGParser.FuncAssignContext ctx) {
+    public void exitFuncAssign(SPEEDYParser.FuncAssignContext ctx) {
         String id = ctx.ID().getText();
         String type = variables.get(id);
         if (type == null) {
@@ -393,7 +393,7 @@ public class LLVMActions extends MBKGBaseListener {
     }
 
     @Override
-    public void exitValue(MBKGParser.ValueContext ctx) {
+    public void exitValue(SPEEDYParser.ValueContext ctx) {
         try {
             argumentsList.add(new Value("ID", ctx.ID().getText()));
         } catch (NullPointerException e) {
@@ -416,17 +416,17 @@ public class LLVMActions extends MBKGBaseListener {
     }
 
     @Override
-    public void exitInt(MBKGParser.IntContext ctx) {
+    public void exitInt(SPEEDYParser.IntContext ctx) {
         stack.push(new Value("int", ctx.INT().getText()));
     }
 
     @Override
-    public void exitFloat(MBKGParser.FloatContext ctx) {
+    public void exitFloat(SPEEDYParser.FloatContext ctx) {
         stack.push(new Value("float", ctx.FLOAT().getText()));
     }
 
     @Override
-    public void exitId(MBKGParser.IdContext ctx) {
+    public void exitId(SPEEDYParser.IdContext ctx) {
         String ID = ctx.ID().getText();
         if (variables.containsKey(ID) || globalVariables.containsKey(ID)) {
             String type = variables.get(ID);
@@ -446,7 +446,7 @@ public class LLVMActions extends MBKGBaseListener {
     }
 
     @Override
-    public void exitArray_id(MBKGParser.Array_idContext ctx) {
+    public void exitArray_id(SPEEDYParser.Array_idContext ctx) {
         String ARRAY_ID = ctx.ARRAY_ID().getText();
         String[] split_array_id = ARRAY_ID.split("\\[");
         String id = split_array_id[0];
@@ -472,7 +472,7 @@ public class LLVMActions extends MBKGBaseListener {
     }
 
     @Override
-    public void exitAdd(MBKGParser.AddContext ctx) {
+    public void exitAdd(SPEEDYParser.AddContext ctx) {
         Value v1 = stack.pop();
         Value v2 = stack.pop();
         if (v1.type.equals(v2.type)) {
@@ -490,7 +490,7 @@ public class LLVMActions extends MBKGBaseListener {
     }
 
     @Override
-    public void exitSub(MBKGParser.SubContext ctx) {
+    public void exitSub(SPEEDYParser.SubContext ctx) {
         Value v1 = stack.pop();
         Value v2 = stack.pop();
         if (v1.type.equals(v2.type)) {
@@ -508,7 +508,7 @@ public class LLVMActions extends MBKGBaseListener {
     }
 
     @Override
-    public void exitMult(MBKGParser.MultContext ctx) {
+    public void exitMult(SPEEDYParser.MultContext ctx) {
         Value v1 = stack.pop();
         Value v2 = stack.pop();
         if (v1.type.equals(v2.type)) {
@@ -526,7 +526,7 @@ public class LLVMActions extends MBKGBaseListener {
     }
 
     @Override
-    public void exitDiv(MBKGParser.DivContext ctx) {
+    public void exitDiv(SPEEDYParser.DivContext ctx) {
         Value v1 = stack.pop();
         Value v2 = stack.pop();
         if (v1.type.equals(v2.type)) {
@@ -544,22 +544,22 @@ public class LLVMActions extends MBKGBaseListener {
     }
 
     @Override
-    public void enterBlockif(MBKGParser.BlockifContext ctx) {
+    public void enterBlockif(SPEEDYParser.BlockifContext ctx) {
         LLVMGenerator.ifstart();
     }
 
     @Override
-    public void exitBlockif(MBKGParser.BlockifContext ctx) {
+    public void exitBlockif(SPEEDYParser.BlockifContext ctx) {
         LLVMGenerator.ifend();
     }
 
     @Override
-    public void exitBlockelse(MBKGParser.BlockelseContext ctx) {
+    public void exitBlockelse(SPEEDYParser.BlockelseContext ctx) {
         LLVMGenerator.elseend();
     }
 
     @Override
-    public void exitCondition(MBKGParser.ConditionContext ctx) {
+    public void exitCondition(SPEEDYParser.ConditionContext ctx) {
         String ID = ctx.ID().getText();
         String operation = ctx.if_operation().getText();
         String value = ctx.comparable_value().getText();
@@ -679,22 +679,22 @@ public class LLVMActions extends MBKGBaseListener {
 
 
     @Override
-    public void enterLoopblock(MBKGParser.LoopblockContext ctx) {
+    public void enterLoopblock(SPEEDYParser.LoopblockContext ctx) {
         String ID = ctx.condition().getChild(0).getText();
         LLVMGenerator.loopstart(getScope(ID));
     }
 
     @Override
-    public void enterBlockfor(MBKGParser.BlockforContext ctx) {
+    public void enterBlockfor(SPEEDYParser.BlockforContext ctx) {
         LLVMGenerator.loopblockstart();
     }
 
-    public void exitBlockfor(MBKGParser.BlockforContext ctx) {
+    public void exitBlockfor(SPEEDYParser.BlockforContext ctx) {
         LLVMGenerator.loopend();
     }
 
     @Override
-    public void enterFunction(MBKGParser.FunctionContext ctx) {
+    public void enterFunction(SPEEDYParser.FunctionContext ctx) {
         isGlobal = false;
         String id = ctx.ID().getText();
         String type = ctx.type().getText();
@@ -708,9 +708,9 @@ public class LLVMActions extends MBKGBaseListener {
             error(ctx.getStart().getLine(), "unsupported return parameter");
         }
         LLVMGenerator.functionstart(id, type);
-        MBKGParser.FparamsContext fp = ctx.fparams();
+        SPEEDYParser.FparamsContext fp = ctx.fparams();
         while (fp != null) {
-            MBKGParser.FparamsContext nfp = fp.fparams();
+            SPEEDYParser.FparamsContext nfp = fp.fparams();
             String paramId = fp.ID().getText();
             String paramType = fp.type().getText();
             variables.put(paramId, paramType);
@@ -732,7 +732,7 @@ public class LLVMActions extends MBKGBaseListener {
     }
 
     @Override
-    public void exitReturn(MBKGParser.ReturnContext ctx) {
+    public void exitReturn(SPEEDYParser.ReturnContext ctx) {
         String ID = ctx.ID().getText();
         String TYPE = variables.get(ID);
         if (TYPE == null) {

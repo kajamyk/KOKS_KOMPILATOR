@@ -1,4 +1,4 @@
-grammar MBKG;
+grammar SPEEDY;
 
 // general
 program: (function? NEWLINE)* block;

@@ -5,10 +5,10 @@ public class Main {
     public static void main(String[] args) throws Exception {
         ANTLRFileStream input = new ANTLRFileStream(args[0]);
 
-        MBKGLexer lexer = new MBKGLexer(input);
+        SPEEDYLexer lexer = new SPEEDYLexer(input);
 
         CommonTokenStream tokens = new CommonTokenStream(lexer);
-        MBKGParser parser = new MBKGParser(tokens);
+        SPEEDYParser parser = new SPEEDYParser(tokens);
 
         ParseTree tree = parser.program();
 

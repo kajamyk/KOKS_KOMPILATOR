@@ -7,7 +7,7 @@ gen: generate compile
 exec: build run
 
 generate:
-	java -jar $(ANTLR) -o output MBKG.g4
+	java -jar $(ANTLR) -o output SPEEDY.g4
 
 compile:
 	javac -cp $(ANTLR):output:. Main.java
