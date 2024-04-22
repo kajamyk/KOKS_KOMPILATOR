@@ -68,9 +68,11 @@ array_values : value ',' array_values
 
 array: '[' array_values ']';
 
-declaration: type ID
-		   | type array_declaration ID
-		   ;
+declaration: GLOBAL type ID
+           | GLOBAL type array_declaration ID
+           | type ID
+           | type array_declaration ID
+           ;
 
 type: 'int' | 'float' ;
 
@@ -126,6 +128,8 @@ ENDFUNCTION: 'endfunction';
 
 RETURN: 'return';
 
+GLOBAL: 'global';
+
 IF: 'if';
 
 ENDIF: 'endif';
@@ -158,5 +162,4 @@ FLOAT : '0'..'9'+'.''0'..'9'+;
 
 NEWLINE: '\r'? '\n';
 
-WS:   (' '|'\t')+ { skip(); }
-    ;
+WS:   (' '|'\t')+ { skip(); };

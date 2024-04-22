@@ -1,0 +1,16 @@
+float function square(float num) begin
+    global int a
+    int b
+    b = 3
+    a = 10
+    float res
+    res = num * num
+    return res
+endfunction
+
+float result
+result = square(result)
+print(a)
+a = 12
+print(a)
+print(b)

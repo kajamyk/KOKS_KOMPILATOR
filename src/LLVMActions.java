@@ -241,28 +241,32 @@ public class LLVMActions extends SPEEDYBaseListener {
         String ID = ctx.ID().getText();
         String TYPE = ctx.type().getText();
 
-        if ((!variables.containsKey(ID) && !isGlobal) || (!globalVariables.containsKey(ID) && isGlobal)) {
+        boolean isVariableGlobal = ctx.GLOBAL() == null ? isGlobal : true;
+
+
+        if ((!variables.containsKey(ID) && !isVariableGlobal) || (!globalVariables.containsKey(ID) && isVariableGlobal)) {
             if (types.contains(TYPE)) {
                 try {
                     String ARRAY_LEN = ctx.array_declaration().getChild(1).getText();
-                    if (isGlobal) {
+                    if (isVariableGlobal) {
                         globalVariables.put(ID, TYPE + '[' + ARRAY_LEN + ']');
+                        System.out.println(globalVariables.get(ID));
                     } else {
                         variables.put(ID, TYPE + '[' + ARRAY_LEN + ']');
                     }
                     if (TYPE.equals("int")) {
-                        LLVMGenerator.declareIntArray(ID, ARRAY_LEN, isGlobal);
+                        LLVMGenerator.declareIntArray(ID, ARRAY_LEN, isVariableGlobal);
                     } else if (TYPE.equals("float")) {
-                        LLVMGenerator.declareFloatArray(ID, ARRAY_LEN, isGlobal);
+                        LLVMGenerator.declareFloatArray(ID, ARRAY_LEN, isVariableGlobal);
                     }
                 } catch (NullPointerException ex) {
-                    if (isGlobal) {
+                    if (isVariableGlobal) {
                         globalVariables.put(ID, TYPE);
                     } else {
                         variables.put(ID, TYPE);
                     }
-                    if (TYPE.equals("int")) LLVMGenerator.declareInt(ID, isGlobal);
-                    else if (TYPE.equals("float")) LLVMGenerator.declareFloat(ID, isGlobal);
+                    if (TYPE.equals("int")) LLVMGenerator.declareInt(ID, isVariableGlobal);
+                    else if (TYPE.equals("float")) LLVMGenerator.declareFloat(ID, isVariableGlobal);
                 }
             } else {
                 System.err.println("Line " + ctx.getStart().getLine() + ", unknown variable type: " + TYPE);
